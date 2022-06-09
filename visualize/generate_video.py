@@ -26,11 +26,6 @@ from models import make_model
 from visualize.utils import generate, cubic_spline_interpolate
 
 latent_dict_celeba = {
-    0:  "coarse_1",
-    1:  "coarse_2",
-    22: "glass",
-    24: "hat",
-    26: "earing",
     2:  "bcg_1",
     3:  "bcg_2",
     4:  "face_shape",

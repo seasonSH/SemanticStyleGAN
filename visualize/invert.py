@@ -235,7 +235,7 @@ if __name__ == '__main__':
                     img_gen = tensor2image(img_gen).squeeze()
                     images.append(img_gen)
                 mimwrite(os.path.join(args.outdir, 'steps/', f'{image_basename}.mp4'), images, fps=10)
-            
+
         if args.finetune_step > 0:
             g_ema = optimize_weights(args, g_ema, target_img_tensor, latent_path[-1], noises)
             with torch.no_grad():

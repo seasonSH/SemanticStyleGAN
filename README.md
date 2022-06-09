@@ -50,8 +50,11 @@ TODO
 # Training
 
 ## Data Preparation
-1. In our work, we use a re-mapped segmentation labels of CelebAMask-HQ. You can download our data from [here](). Then you can uncompress the original images and labels to `data/CelebAMask-HQ`.
-
+1. In our work, we use re-mapped segmentation labels of CelebAMask-HQ. To reproduce this dataset, first download the original CelebAMask-HQ dataset from [here](https://drive.google.com/file/d/1badu11NqxGf6qM3PTTooQDJvQbejgbTv/view) and uncompress it to `data/CelebAMask-HQ`. Then, run the following command to create the images and labels used for training:
+```
+python data/preprocess_celeba.py data/CelebAMask-HQ
+```
+The script will create four folders under the `data/CelebAMask-HQ` that contain the images and labels for training and testing, respectively.
 
 2. Similar to rosinality's implementation of StyleGAN2, we use LMDB datasets for training. An example command is provided below:
 ```
@@ -61,7 +64,7 @@ data/CelebAMask-HQ/label_train \
 --out data/lmdb_celebamaskhq_512 \
 --size 512
 ```
-You can also use your own dataset for the step. Note that he mask labels and image files are matched according to file names. It is okay if the files are under sub-directories. But make sure the base names are unique.
+You can also use your own dataset for the step. Note that the mask labels and image files are matched according to file names. It is okay if the files are under sub-directories. But make sure the base names are unique.
 
 3. Prepare the inception file for calculating validation:
 ```
@@ -73,7 +76,7 @@ data/lmdb_celebamaskhq_512
 ```
 
 ## Training SemanticStyleGAN
-The main training script can be found in `semanticStyleGAN/train.py`.  Here, we provide an example for training on the CelebAMask-HQ as prepared above :
+The main training script can be found in `train.py`. Here, we provide an example for training on the CelebAMask-HQ as prepared above :
 ```
 python train.py \
 --dataset data/lmdb_celebamaskhq_512 \
@@ -142,12 +145,8 @@ python visualize/generate.py \
 ```
 The `save_latent` flag will save the w latent code of each synthesized image in a separate `.npy` file.
 
-### Latent Interpolation
-
-<video autoplay="" loop="" muted="" playsinline="" width="100%">
-    <source src="https://semanticstylegan.github.io/videos/traverse.mp4" type="video/mp4">
-</video>
-
+### Local Latent Interpolation
+<img src="docs/local_interpolation.gif" width="400px"/>  
 In `visualize/generate_video.py`, we provide a script for visualizing the local interpolation by SemanticStyleGAN.
 An example command is provided below:
 ```
@@ -220,12 +219,12 @@ https://github.com/S-aiueo32/lpips-pytorch
 Copyright (c) 2020, Sou Uchida  
 License (BSD 2-Clause) https://github.com/S-aiueo32/lpips-pytorch/blob/master/LICENSE  
 
-**ReStyle model and implementation:**
-https://github.com/yuval-alaluf/restyle-encoder
-Copyright (c) 2021 Yuval Alaluf
-License (MIT) https://github.com/yuval-alaluf/restyle-encoder/blob/main/LICENSE
+**ReStyle model and implementation:** 
+https://github.com/yuval-alaluf/restyle-encoder 
+Copyright (c) 2021 Yuval Alaluf 
+License (MIT) https://github.com/yuval-alaluf/restyle-encoder/blob/main/LICENSE 
 
-**Please Note**: The CUDA files under the [StyleGAN2 ops directory](https://github.com/yuval-alaluf/hyperstyle/tree/master/models/stylegan2/op) are made available under the [Nvidia Source Code License-NC](https://nvlabs.github.io/stylegan2/license.html)
+**Please Note**: The CUDA files are made available under the [Nvidia Source Code License-NC](https://nvlabs.github.io/stylegan2/license.html)
 
 # Acknowledgments
 This code borrows from [SemanticGAN](https://github.com/eladrich/pixel2style2pixel).
