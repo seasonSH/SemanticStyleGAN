@@ -229,10 +229,10 @@ https://github.com/S-aiueo32/lpips-pytorch
 Copyright (c) 2020, Sou Uchida  
 License (BSD 2-Clause) https://github.com/S-aiueo32/lpips-pytorch/blob/master/LICENSE  
 
-**ReStyle model and implementation:** 
-https://github.com/yuval-alaluf/restyle-encoder 
-Copyright (c) 2021 Yuval Alaluf 
-License (MIT) https://github.com/yuval-alaluf/restyle-encoder/blob/main/LICENSE 
+**ReStyle model and implementation:**  
+https://github.com/yuval-alaluf/restyle-encoder  
+Copyright (c) 2021 Yuval Alaluf  
+License (MIT) https://github.com/yuval-alaluf/restyle-encoder/blob/main/LICENSE  
 
 **Please Note**: The CUDA files are made available under the [Nvidia Source Code License-NC](https://nvlabs.github.io/stylegan2/license.html)
 
