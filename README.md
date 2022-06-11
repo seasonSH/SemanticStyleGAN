@@ -49,10 +49,10 @@ In this repository, we provide pretrained models for various domains.
 
 | Path | Description
 | :--- | :----------
-|[CelebAMask-HQ]()  | Trained on the [CelebAMask-HQ](https://github.com/switchablenorms/CelebAMask-HQ) dataset.
-|[BitMoji]()  | Fine-tuned on the re-cropped [BitMoji](https://www.kaggle.com/datasets/mostafamozafari/bitmoji-faces) dataset.
-|[MetFaces]()  | Fine-tuned on the [MetFaces](https://github.com/NVlabs/metfaces-dataset) dataset.
-|[Toonify]()  | Fine-tuned on the [Tonnify](https://github.com/justinpinkney/toonify) dataset.
+|[CelebAMask-HQ](https://github.com/seasonSH/SemanticStyleGAN/releases/download/1.0.0/CelebAMask-HQ-512x512.pt)  | Trained on the [CelebAMask-HQ](https://github.com/switchablenorms/CelebAMask-HQ) dataset.
+|[BitMoji](https://github.com/seasonSH/SemanticStyleGAN/releases/download/1.0.0/BitMoji-512x512.pt)  | Fine-tuned on the re-cropped [BitMoji](https://www.kaggle.com/datasets/mostafamozafari/bitmoji-faces) dataset.
+|[MetFaces](https://github.com/seasonSH/SemanticStyleGAN/releases/download/1.0.0/MetFaces-512x512.pt)  | Fine-tuned on the [MetFaces](https://github.com/NVlabs/metfaces-dataset) dataset.
+|[Toonify](https://github.com/seasonSH/SemanticStyleGAN/releases/download/1.0.0/Toonify-512x512.pt)  | Fine-tuned on the [Tonnify](https://github.com/justinpinkney/toonify) dataset.
 
 <br>
 
@@ -64,7 +64,7 @@ In `visualize/generate.py`, we provide a script for sampling random images and t
 An example command is provided below:
 ```
 python visualize/generate.py \
-/path/to/checkpoint \
+pretrained/CelebAMask-HQ-512x512.pt \
 --outdir results/samples \
 --sample 20 \
 --save_latent
@@ -78,7 +78,7 @@ In `visualize/generate_video.py`, we provide a script for visualizing the local 
 An example command is provided below:  
 ```
 python visualize/generate_video.py \
-/path/to/checkpoint \
+pretrained/CelebAMask-HQ-512x512.pt \
 --outdir /results/interpolation \
 --latent /results/samples/000000_latent.npy
 ```
@@ -92,23 +92,15 @@ to the synthesis procedure.
 An example command is provided below:
 ```
 python visualize/generate_components.py \
-/path/to/checkpoint \
+pretrained/CelebAMask-HQ-512x512.pt \
 --outdir /results/components \
 ```
 This command will synthesize random images in a gradual manner. You can also visualize the components of a specific target image with the following command:
 ```
 python visualize/generate_components.py \
-/path/to/checkpoint \
+pretrained/CelebAMask-HQ-512x512.pt \
 --outdir /results/components/000000 \
 --latent /results/samples/000000_latent.npy \
-```
-
-## Computing Metrics
-Given a trained generator and a prepared inception file, we can compute the metrics with following command:
-```
-python calc_fid.py \
---ckpt /path/to/checkpoint \
---inception /path/to/inception/file 
 ```
 
 ## Inversion
@@ -116,7 +108,7 @@ python calc_fid.py \
 You can use `visualize/invert.py` for inverting real images into the latent space of SemanticStyleGAN via optimization:
 ```
 python visualize/invert.py \
---ckpt /path/to/checkpoint \
+pretrained/CelebAMask-HQ-512x512.pt \
 --imgdir /path/to/img/directory/ \
 --outdir /path/to/output/directory/ \
 --size 512 \
@@ -125,6 +117,15 @@ This script will save the reconstructed images and their corresponding w-plus la
 
 ### Encoder
 TODO
+
+
+## Computing Metrics
+Given a trained generator and a prepared inception file, we can compute the metrics with following command:
+```
+python calc_fid.py \
+--ckpt /path/to/checkpoint \
+--inception /path/to/inception/file 
+```
 
 <br>
 
@@ -151,7 +152,7 @@ You can also use your own dataset for the step. Note that the mask labels and im
 ```
 python prepare_inception.py
 data/lmdb_celebamaskhq_512
---output data/cache_celebamaskhq_512 \
+--output data/inception_celebamaskhq_512.pkl \
 --size 512
 --dataset_type mask
 ```
@@ -161,6 +162,7 @@ The main training script can be found in `train.py`. Here, we provide an example
 ```
 python train.py \
 --dataset data/lmdb_celebamaskhq_512 \
+--inception data/inception_celebamaskhq_512.pkl \
 --checkpoint_dir checkpoint/celebamaskhq_512 \
 --seg_dim 13 \
 --size 512 \
@@ -173,6 +175,7 @@ or you can use the following command for multi-gpu training (we assume 8 gpus ar
 python -m torch.distributed.launch --nproc_per_node=8 \
 train.py \
 --dataset data/lmdb_celebamaskhq_512 \
+--inception data/inception_celebamaskhq_512.pkl \
 --checkpoint_dir checkpoint/celebamaskhq_512 \
 --seg_dim 13 \
 --size 512 \
