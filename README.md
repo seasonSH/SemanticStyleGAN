@@ -45,7 +45,6 @@ Official Implementation of our SemanticStyleGAN paper for training and inference
 # Pretrained Models
 
 In this repository, we provide pretrained models for various domains.  
-(TODO: Add model URLs)
 
 | Path | Description
 | :--- | :----------
