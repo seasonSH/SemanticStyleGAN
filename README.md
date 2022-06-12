@@ -1,21 +1,14 @@
 # SemanticStyleGAN: Learning Compositional Generative Priors for Controllable Image Synthesis and Editing (CVPR 2022)
 
+<a href="https://arxiv.org/abs/2112.02236"><img src="https://img.shields.io/badge/arXiv-2112.02236-b31b1b" height=22.5></a>
+<a href="https://creativecommons.org/licenses/by/4.0"><img src="https://img.shields.io/badge/LICENSE-CC--BY--4.0-yellow" height=22.5></a>
+<a href="https://www.youtube.com/watch?v=nfKiVX4pFlw"><img src="https://img.shields.io/static/v1?label=CVPR 2022&message=5 Minute Video&color=red" height=22.5></a>  
 > Yichun Shi, Xiao Yang, Yangyue Wan, Xiaohui Shen
 > 
 > Recent studies have shown that StyleGANs provide promising prior models for downstream tasks on image synthesis and editing. However, since the latent codes of StyleGANs are designed to control global styles, it is hard to achieve a fine-grained control over synthesized images. We present SemanticStyleGAN, where a generator is trained to model local semantic parts separately and synthesizes images in a compositional way. The structure and texture of different local parts are controlled by corresponding latent codes. Experimental results demonstrate that our model provides a strong disentanglement between different spatial areas. When combined with editing methods designed for StyleGANs, it can achieve a more fine-grained control to edit synthesized or real images. The model can also be extended to other domains via transfer learning. Thus, as a generic prior model with built-in disentanglement, it could facilitate the development of GAN-based applications and enable more potential downstream tasks.
 
-<a href="https://arxiv.org/abs/2112.02236"><img src="https://img.shields.io/badge/arXiv-2112.02236-b31b1b" height=22.5></a>
-<a href="https://creativecommons.org/licenses/by/4.0"><img src="https://img.shields.io/badge/LICENSE-CC--BY--4.0-yellow" height=22.5></a>  
 
-<a href="https://www.youtube.com/watch?v=nfKiVX4pFlw"><img src="https://img.shields.io/static/v1?label=CVPR 2022&message=5 Minute Video&color=red" height=22.5></a>  
-
-
-<p align="center">
-<img src="docs/teaser.jpg" width="100%"/>  
-<br>
-SemanticStyleGAN factorizes its latent space based on semantic regions. Here, we show the results of style mixing by swapping
-local latent codes.
-</p>
+<a href="https://www.youtube.com/watch?v=nfKiVX4pFlw"><img src="docs/abstract_idea.png" width="550px"/></a>
 
 # Description   
 Official Implementation of our SemanticStyleGAN paper for training and inference. 
@@ -71,7 +64,7 @@ pretrained/CelebAMask-HQ-512x512.pt \
 The `save_latent` flag will save the w latent code of each synthesized image in a separate `.npy` file.
 
 ### Local Latent Interpolation
-<img src="docs/local_interpolation.gif" width="400px"/>  
+<img src="docs/local_interpolation.gif" width="600px"/>  
 
 In `visualize/generate_video.py`, we provide a script for visualizing the local interpolation by SemanticStyleGAN.
 An example command is provided below:  
@@ -122,7 +115,7 @@ pretrained/BitMoji-512x512.pt \
 --outdir /results/interpolation_inversion \
 --latent /results/inversion/latent/0.npy
 ```
-<img src="docs/inversion_bitmoji.gif" width="400px"/>  
+<img src="docs/inversion_bitmoji.gif" width="300px"/>  
 
 
 ### Encoder
