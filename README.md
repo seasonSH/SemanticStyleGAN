@@ -108,14 +108,25 @@ You can use `visualize/invert.py` for inverting real images into the latent spac
 ```
 python visualize/invert.py \
 pretrained/CelebAMask-HQ-512x512.pt \
---imgdir /path/to/img/directory/ \
---outdir /path/to/output/directory/ \
+--imgdir data/examples \
+--outdir results/inversion \
 --size 512 \
 ```
 This script will save the reconstructed images and their corresponding w-plus latent codes in separate sub-directories under the `outdir`. Additionally, you can set `--finetune_step` to a non-zero integer for pivotal tuning inversion.
 
+You can also manipulate the reconstructed face by passing the latent code to the synthesis code. You can also choose to edit the face with an fine-tuned generator for style transfer.
+An example command is provided below:  
+```
+python visualize/generate_video.py \
+pretrained/BitMoji-512x512.pt \
+--outdir /results/interpolation_inversion \
+--latent /results/inversion/latent/0.npy
+```
+
+
 ### Encoder
 TODO
+
 
 
 ## Computing Metrics

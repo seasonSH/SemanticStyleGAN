@@ -89,7 +89,7 @@ if __name__ == '__main__':
             styles = model.style(torch.randn(args.sample, model.style_dim, device=args.device))
             styles = args.truncation * styles + (1-args.truncation) * mean_latent.unsqueeze(0)
         else:
-            styles = torch.tensor(np.load(args.latent), device=args.device).reshape(1,model.style_dim)
+            styles = torch.tensor(np.load(args.latent), device=args.device)
 
         for sample_index in range(styles.size(0)):
             style_inputs = styles[sample_index:sample_index+1]

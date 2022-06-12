@@ -30,7 +30,7 @@ from torch import optim
 import torch.nn.functional as F
 from torchvision import transforms
 
-from criteria import lpips
+from criteria.lpips import lpips
 from models import make_model
 from visualize.utils import tensor2image, tensor2seg
 
@@ -56,7 +56,7 @@ def calc_lpips_loss(im1, im2):
 
 def optimize_latent(args, g_ema, target_img_tensor):
 
-    noises = g_ema.render_net.get_noises(noise=None, randomize_noises=False)
+    noises = g_ema.render_net.get_noise(noise=None, randomize_noise=False)
     for noise in noises:
         noise.requires_grad = True
 
@@ -81,7 +81,7 @@ def optimize_latent(args, g_ema, target_img_tensor):
         
         img_gen, _ = g_ema([latent_in], input_is_latent=True, randomize_noise=False, noise=noises)
 
-        p_loss = percept(img_gen, target_img_tensor).mean()
+        p_loss = calc_lpips_loss(img_gen, target_img_tensor)
         mse_loss = F.mse_loss(img_gen, target_img_tensor)
         n_loss = torch.mean(torch.stack([noise.pow(2).mean() for noise in noises]))
 
@@ -112,7 +112,7 @@ def optimize_weights(args, g_ema, target_img_tensor, latent_in, noises=None):
 
     for p in g_ema.parameters():
         p.requires_grad = True
-    optimizer = optim.Adam(g_ema.local_nets.parameters(), lr=args.lr_g)
+    optimizer = optim.Adam(g_ema.parameters(), lr=args.lr_g)
 
     pbar = tqdm(range(args.finetune_step))
     for i in pbar:
@@ -120,7 +120,7 @@ def optimize_weights(args, g_ema, target_img_tensor, latent_in, noises=None):
         
         img_gen, _ = g_ema([latent_in], input_is_latent=True, randomize_noise=False, noise=noises)
 
-        p_loss = percept(img_gen, target_img_tensor).mean()
+        p_loss = calc_lpips_loss(img_gen, target_img_tensor)
         mse_loss = F.mse_loss(img_gen, target_img_tensor)
 
         # main loss function
@@ -171,14 +171,11 @@ if __name__ == '__main__':
     print("Loading model ...")
     ckpt = torch.load(args.ckpt)
     g_ema = make_model(ckpt['args'])
-    g_ema.to(args.device)
+    g_ema.to(device)
     g_ema.eval()
     g_ema.load_state_dict(ckpt['g_ema'])
-    g_ema = g_ema.style(torch.randn(args.truncation_mean, g_ema.style_dim, device=device)).mean(0)
 
-    percept = lpips.PerceptualLoss(
-        model='net-lin', net='vgg', use_gpu=device.startswith('cuda')
-    ).to(device)
+    percept = lpips.LPIPS(net_type='vgg').to(device)
     
 
     img_list = sorted(os.listdir(args.imgdir))
@@ -196,7 +193,6 @@ if __name__ == '__main__':
     if args.finetune_step > 0:
         os.makedirs(os.path.join(args.outdir, 'weights'), exist_ok=True)
 
-    resize = min(args.size, 256)
     transform = get_transformation(args)
 
     for image_name in img_list:
@@ -235,7 +231,7 @@ if __name__ == '__main__':
                     img_gen = tensor2image(img_gen).squeeze()
                     images.append(img_gen)
                 mimwrite(os.path.join(args.outdir, 'steps/', f'{image_basename}.mp4'), images, fps=10)
-
+            
         if args.finetune_step > 0:
             g_ema = optimize_weights(args, g_ema, target_img_tensor, latent_path[-1], noises)
             with torch.no_grad():

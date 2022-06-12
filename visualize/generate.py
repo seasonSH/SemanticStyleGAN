@@ -67,5 +67,5 @@ if __name__ == '__main__':
             imageio.imwrite(f"{args.outdir}/{str(i).zfill(6)}_img.jpg", images[i])
             imageio.imwrite(f"{args.outdir}/{str(i).zfill(6)}_seg.jpg", segs[i])
             if args.save_latent:
-                np.save(f'{args.outdir}/{str(i).zfill(6)}_latent.npy', styles[i].cpu().numpy())
+                np.save(f'{args.outdir}/{str(i).zfill(6)}_latent.npy', styles[i:i+1].cpu().numpy())
     print(f"Average speed: {(time.time() - start_time)/(args.sample)}s")
