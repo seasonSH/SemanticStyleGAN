@@ -122,6 +122,7 @@ pretrained/BitMoji-512x512.pt \
 --outdir /results/interpolation_inversion \
 --latent /results/inversion/latent/0.npy
 ```
+<img src="docs/inversion_bitmoji.gif" width="400px"/>  
 
 
 ### Encoder
