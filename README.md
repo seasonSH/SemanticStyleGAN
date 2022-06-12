@@ -113,7 +113,7 @@ An example command is provided below:
 python visualize/generate_video.py \
 pretrained/BitMoji-512x512.pt \
 --outdir /results/interpolation_inversion \
---latent /results/inversion/latent/0.npy
+--latent /results/inversion/latent/1.npy
 ```
 <img src="docs/inversion_bitmoji.gif" width="300px"/>  
 
