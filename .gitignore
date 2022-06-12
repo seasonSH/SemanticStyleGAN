@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 .pt
 .DS_Store
-data/
 pretrained/

@@ -26,8 +26,6 @@ from models import make_model
 from visualize.utils import generate, cubic_spline_interpolate
 
 latent_dict_celeba = {
-    0:  "coarse_1",
-    1:  "coarse_2",
     2:  "bcg_1",
     3:  "bcg_2",
     4:  "face_shape",
@@ -51,6 +49,8 @@ latent_dict_celeba = {
     22: "glass",
     24: "hat",
     26: "earing",
+    0:  "coarse_1",
+    1:  "coarse_2",
 }
 
 if __name__ == '__main__':
@@ -122,3 +122,4 @@ if __name__ == '__main__':
  
             frames = [np.concatenate((img,seg),1) for (img,seg) in zip(images,segs)]
             imageio.mimwrite(f'{args.outdir}/{latent_index:02d}_{latent_name}.mp4', frames, fps=20)
+            print(f"{args.outdir}/{latent_index:02d}_{latent_name}.mp4")
