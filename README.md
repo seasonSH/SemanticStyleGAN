@@ -64,7 +64,7 @@ pretrained/CelebAMask-HQ-512x512.pt \
 The `--save_latent` flag will save the w latent code of each synthesized image in a separate `.npy` file.
 
 ### Local Latent Interpolation
-<img src="docs/local_interpolation.gif" width="600px"/>  
+<img src="docs/local_interpolation.gif" width="500"/>  
 
 In `visualize/generate_video.py`, we provide a script for visualizing the local interpolation by SemanticStyleGAN.
 An example command is provided below:  
@@ -80,7 +80,7 @@ a specific latent subspace.
 
 ### Synthesizing Components
 
-<img src="docs/components.jpg" width="90%"/>  
+<img src="docs/components.jpg" width="800"/>  
 
 In `visualize/generate_components.py`, we provide a script for visualizing the components synthesized by SemanticStyleGAN, where we will gradually add more local generators
 to the synthesis procedure.
@@ -115,7 +115,7 @@ pretrained/BitMoji-512x512.pt \
 ```
 Here is an example result of changing the latent code of eyes:  
 
-<img src="docs/inversion_bitmoji.gif" width="300px"/>  
+<img src="docs/inversion_bitmoji.gif" width="500"/>  
 
 
 ## Computing Metrics
