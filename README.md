@@ -205,6 +205,7 @@ Then, you can run the following command for fine-tuning on the target dataset:
 ```
 python -m torch.distributed.launch --nproc_per_node=8 \
 train_adaptation.py \
+--ckpt pretrained/CelebAMask-HQ-512x512.pt \
 --dataset data/lmdb_metfaces_512 \
 --checkpoint_dir checkpoint/metfaces \
 --seg_dim 13 \
