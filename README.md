@@ -239,7 +239,7 @@ License (MIT) https://github.com/yuval-alaluf/restyle-encoder/blob/main/LICENSE
 **Please Note**: The CUDA files are made available under the [Nvidia Source Code License-NC](https://nvlabs.github.io/stylegan2/license.html)
 
 # Acknowledgments
-This code is initialy built from [SemanticGAN](https://github.com/eladrich/pixel2style2pixel).
+This code is initialy built from [SemanticGAN](https://github.com/nv-tlabs/semanticGAN_code).
 
 
 # Citation
