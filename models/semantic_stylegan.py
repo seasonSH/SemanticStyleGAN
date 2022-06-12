@@ -144,8 +144,9 @@ class SemanticGenerator(nn.Module):
         self.residual_refine = residual_refine
         self.detach_texture = detach_texture
         self.transparent_dims = list(transparent_dims)
-        self.n_latent = self.base_layers + self.n_local * 2
-        print(f"Coarse seg size: {self.coarse_size}, Feature map size: {self.min_feat_size}")
+        self.n_latent = self.base_layers + self.n_local * 2 # Default latent space
+        self.n_latent_expand = self.n_local * self.local_layers # Expanded latent space
+        print(f"n_latent: {self.n_latent}, n_latent_expand: {self.n_latent_expand}")
 
         self.pos_embed = PositionEmbedding(2, self.local_channel, N_freqs=self.log_size)
         self.local_nets = nn.ModuleList()
@@ -177,8 +178,14 @@ class SemanticGenerator(nn.Module):
         return styles
 
     def expand_latents(self, latent):
+        ''' Expand the default latent codes.
+        Input:
+            latent: tensor of N x (n_base + n_local x 2) x style_dim
+        Output:
+            latent_expanded: tensor of N x (n_local x local_layers) x style_dim
+        '''
         assert latent.ndim == 3
-        if latent.size(1) == self.n_local * self.local_layers:
+        if latent.size(1) == self.n_latent_expand:
             return latent
 
         assert latent.size(1) == self.n_latent
@@ -202,13 +209,16 @@ class SemanticGenerator(nn.Module):
 
     def mix_styles(self, styles):
         if len(styles) < 2:
+            # Input is the latent code
             if styles[0].ndim < 3:
                 latent = styles[0].unsqueeze(1).repeat(1, self.n_latent, 1)
             else:
                 latent = styles[0]
         elif len(styles) > 2:
+            # Input is the latent code (list)
             latent = torch.stack(styles, 1)
         else:
+            # Input are two latent codes -> style mixing
             base_latent = styles[0].unsqueeze(1).repeat(1, self.base_layers, 1)
             latent = [base_latent]
             for i in range(self.n_local):
@@ -236,6 +246,7 @@ class SemanticGenerator(nn.Module):
     def composite(self, feats, depths, mask=None):
         seg = F.softmax(torch.cat(depths, dim=1), dim=1)
         if mask is not None:
+            # If mask is given, ignore specified classes
             assert mask.size(0) == seg.size(0)
             assert mask.size(1) == seg.size(1)
             mask = mask.reshape(seg.size(0), seg.size(1), 1, 1)
