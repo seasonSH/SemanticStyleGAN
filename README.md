@@ -89,7 +89,7 @@ An example command is provided below:
 python visualize/generate_components.py \
 pretrained/CelebAMask-HQ-512x512.pt \
 --outdir results/components \
---latent results/samples/000000_latent.npy \
+--latent results/samples/000000_latent.npy
 ```
 You can also ignore the `--latent` argument for generating components for a random latent code.
 
@@ -101,11 +101,11 @@ python visualize/invert.py \
 --ckpt pretrained/CelebAMask-HQ-512x512.pt \
 --imgdir data/examples \
 --outdir results/inversion \
---size 512 \
+--size 512
 ```
-This script will save the reconstructed images and their corresponding w-plus latent codes in separate sub-directories under the `outdir`. Additionally, you can set `--finetune_step` to a non-zero integer for pivotal tuning inversion.
+This script will save the reconstructed images and their corresponding w-plus latent codes in separate sub-directories under the `outdir`. Additionally, you can set `--finetune_step` to a non-zero integer (e.g. 300) for pivotal tuning inversion, which outputs a new fine-tuned generator for each image.
 
-You can manipulate the reconstructed faces by using the saved latent codes. You can also choose to edit the face with a fine-tuned generator for style transfer.
+You can manipulate the reconstructed faces by using the saved latent codes. You can also choose to edit the face with a fine-tuned generator from PTI or domain adaptation.
 An example command is provided below:  
 ```
 python visualize/generate_video.py \
@@ -180,7 +180,7 @@ train.py \
 --size 512 \
 --transparent_dims 10 12 \
 --residual_refine \
---batch 4 \
+--batch 4
 ```
 Here, `--seg_dim` refers to the number of segmentation classes (including background). `--transparent_dims` specifies the classes that are treated to be possibly transparent. 
 

@@ -115,9 +115,7 @@ def optimize_weights(args, g_ema, target_img_tensor, latent_in, noises=None):
     optimizer = optim.Adam(g_ema.parameters(), lr=args.lr_g)
 
     pbar = tqdm(range(args.finetune_step))
-    for i in pbar:
-        optimizer.param_groups[0]['lr'] = get_lr(float(i)/args.finetune_step, args.lr_g)
-        
+    for i in pbar:        
         img_gen, _ = g_ema([latent_in], input_is_latent=True, randomize_noise=False, noise=noises)
 
         p_loss = calc_lpips_loss(img_gen, target_img_tensor)
@@ -157,9 +155,9 @@ if __name__ == '__main__':
     parser.add_argument('--truncation', type=float, default=1, help='truncation tricky, trade-off between quality and diversity')
 
     parser.add_argument('--lr', type=float, default=0.1)
-    parser.add_argument('--lr_g', type=float, default=0.01)
-    parser.add_argument('--step', type=int, default=400, help='optimization steps [100-500 should give good results]')
-    parser.add_argument('--finetune_step', type=int, default=0, help='optimization steps after which to add nose')
+    parser.add_argument('--lr_g', type=float, default=1e-4)
+    parser.add_argument('--step', type=int, default=400, help='latent optimization steps')
+    parser.add_argument('--finetune_step', type=int, default=0, help='pivotal tuning inversion (PTI) steps (200-400 should give good result)')
     parser.add_argument('--noise_regularize', type=float, default=10)
     parser.add_argument('--lambda_mse', type=float, default=0.1)
     parser.add_argument('--lambda_lpips', type=float, default=1.0)
@@ -241,4 +239,5 @@ if __name__ == '__main__':
 
                 # Weights
                 image_basename = os.path.splitext(image_name)[0]
-                torch.save(g_ema.state_dict(), os.path.join(args.outdir, 'weights/', f'{image_basename}.pt'))
+                ckpt_new = {"g_ema": g_ema.state_dict(), "args": ckpt["args"]}
+                torch.save(ckpt_new, os.path.join(args.outdir, 'weights/', f'{image_basename}.pt'))
